@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: pricepulse_db
+    environment:
+      POSTGRES_USER: pricepulse
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: pricepulse
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pricepulse"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: pricepulse_backend
+    environment:
+      - DATABASE_URL=postgresql://pricepulse:password@db:5432/pricepulse?schema=public
+      - PORT=3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    command: npm run dev
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: pricepulse_frontend
+    environment:
+      - VITE_API_URL=http://localhost:3000/api
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    command: npm run dev
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+volumes:
+  postgres_data:

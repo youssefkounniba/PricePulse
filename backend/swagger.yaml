@@ -1,0 +1,81 @@
+openapi: 3.0.0
+info:
+  title: PricePulse API
+  version: 1.0.0
+  description: API for tracking e-commerce product prices
+servers:
+  - url: http://localhost:3000/api
+paths:
+  /products:
+    get:
+      summary: Get all tracked products
+      responses:
+        '200':
+          description: A list of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+    post:
+      summary: Add a new product to track
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - url
+                - name
+                - initialPrice
+              properties:
+                url:
+                  type: string
+                  format: uri
+                name:
+                  type: string
+                initialPrice:
+                  type: number
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Validation error
+        '409':
+          description: Product already tracked
+  /products/{id}:
+    delete:
+      summary: Delete a tracked product
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted successfully
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+        url:
+          type: string
+        name:
+          type: string
+        initialPrice:
+          type: number
+        currentPrice:
+          type: number
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
