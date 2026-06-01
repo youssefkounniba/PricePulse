@@ -8,7 +8,7 @@ export const fetchProducts = async (): Promise<Product[]> => {
   return res.json();
 };
 
-export const addProduct = async (data: { url: string; name: string; initialPrice: number }): Promise<Product> => {
+export const addProduct = async (data: { url: string }): Promise<Product> => {
   const res = await fetch(API_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

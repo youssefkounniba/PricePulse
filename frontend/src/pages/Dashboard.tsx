@@ -29,14 +29,14 @@ const Dashboard: React.FC = () => {
   });
 
   return (
-    <div className="py-8">
-      <div className="mb-8 flex items-center justify-between">
+    <div className="py-10">
+      <div className="mb-10 flex items-center justify-between">
         <div>
-          <h2 style={{fontSize: '1.875rem', fontWeight: 700, marginBottom: '0.5rem'}}>Overview</h2>
-          <p className="text-secondary">Monitor your tracked products in real-time.</p>
+          <h2 className="font-display" style={{fontSize: '2rem', fontWeight: 700, marginBottom: '0.75rem'}}>Overview</h2>
+          <p className="text-secondary" style={{fontSize: '1.05rem'}}>Monitor your tracked products in real-time.</p>
         </div>
-        <div className="flex items-center gap-2 text-success badge badge-success">
-          <Activity size={16} className="animate-pulse" />
+        <div className="flex items-center gap-2 text-success badge badge-success" style={{padding: '0.5rem 1rem'}}>
+          <Activity size={18} className="animate-pulse" />
           Live Updates
         </div>
       </div>
@@ -47,8 +47,8 @@ const Dashboard: React.FC = () => {
         error={addMutation.isError ? (addMutation.error as Error).message : null}
       />
 
-      <div>
-        <h3 style={{fontSize: '1.25rem', fontWeight: 600, marginBottom: '1.5rem'}}>Tracked Products ({products?.length || 0})</h3>
+      <div className="mt-12">
+        <h3 className="font-display" style={{fontSize: '1.5rem', fontWeight: 600, marginBottom: '2rem'}}>Tracked Products ({products?.length || 0})</h3>
         
         {isLoading && (
           <div className="text-center py-12 text-secondary animate-pulse">
@@ -63,13 +63,13 @@ const Dashboard: React.FC = () => {
         )}
 
         {products && products.length === 0 && !isLoading && (
-          <div className="text-center py-12 text-secondary card border-dashed">
+          <div className="text-center py-16 text-secondary card border-dashed">
             No products tracked yet. Add one above to get started.
           </div>
         )}
 
         {products && products.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {products.map(product => (
               <ProductCard 
                 key={product.id} 
